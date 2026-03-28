@@ -76,26 +76,46 @@ uvicorn gateway.main:app --host 0.0.0.0 --port 8000
 - `GET /stats` - per-node load/latency/errors/health snapshot
 - `GET /metrics` - Prometheus metrics
 
-## Benchmark (show the wow factor)
+## Benchmark
 
-Run side-by-side baseline vs concurrent:
+**Reference (Colab T4, single node, Qwen2.5-3B-Instruct):** ~7× higher aggregate throughput concurrent vs naive; sweep shows throughput leveling off once client concurrency exceeds server limits. [Colab reproduction](docs/COLAB_SETUP.md).
+
+
+Run from the repository root with `PYTHONPATH=.`. Set **`--model`** to the same model ID as vLLM and `MODEL_NAME` in `gateway/.env`.
+
+| Harness | Purpose |
+|--------|---------|
+| `benchmark.run_benchmark` | Compares sequential (**naive**) vs overlapping (**concurrent**) requests; reports throughput and latency. |
+| `benchmark.run_load_sweep` | Varies client concurrency to observe scaling and saturation under gateway / vLLM limits. |
+
+**Throughput vs sequential** (`--mode both`):
 
 ```bash
-python benchmark/run_benchmark.py \
+PYTHONPATH=. python -m benchmark.run_benchmark \
   --mode both \
   --num-requests 60 \
   --concurrency 12 \
   --base-url http://localhost:8000 \
   --auth-token your-secret-token-here \
-  --log-node \
+  --model mistralai/Mistral-7B-Instruct-v0.3 \
   --output benchmark/results/run_both.json
 ```
 
-What to expect:
+Add **`--log-node`** to summarize routing across nodes via `X-Routed-Node`.
 
-- higher throughput vs naive mode
-- requests distributed across nodes
-- graceful behavior if one node fails
+**Concurrency sweep** (writes JSON + CSV under `benchmark/results/`):
+
+```bash
+PYTHONPATH=. python -m benchmark.run_load_sweep \
+  --num-requests 60 \
+  --base-url http://localhost:8000 \
+  --auth-token your-secret-token-here \
+  --model mistralai/Mistral-7B-Instruct-v0.3 \
+  --output-json benchmark/results/load_sweep.json \
+  --output-csv benchmark/results/load_sweep.csv
+```
+
+Optional: **`--concurrencies 1,2,4,8`** to align sweep steps with `MAX_CONCURRENT_REQUESTS` and vLLM `--max-num-seqs`.
 
 ## Observability highlights
 
