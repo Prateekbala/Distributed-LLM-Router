@@ -1,6 +1,7 @@
 import argparse
 import json
 from collections import Counter
+from dataclasses import asdict
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -102,7 +103,7 @@ async def main() -> None:
                 max_tokens=args.max_tokens,
                 capture_node=args.log_node,
             )
-            data["runs"]["concurrent"] = concurrent.__dict__
+            data["runs"]["concurrent"] = asdict(concurrent)
             if args.log_node:
                 data["runs"]["concurrent_node_counts"] = _node_counts(concurrent_results)
 
