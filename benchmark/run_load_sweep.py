@@ -9,6 +9,19 @@ from benchmark.concurrent_client import run_concurrent
 from benchmark.run_benchmark import build_prompt
 
 
+def _parse_concurrencies(s: str) -> list[int]:
+    parts = [p.strip() for p in s.split(",") if p.strip()]
+    if not parts:
+        raise argparse.ArgumentTypeError("concurrencies must list at least one integer")
+    out: list[int] = []
+    for p in parts:
+        c = int(p)
+        if c < 1:
+            raise argparse.ArgumentTypeError(f"concurrency must be >= 1, got {c}")
+        out.append(c)
+    return out
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Run concurrency load sweep")
     parser.add_argument("--num-requests", type=int, default=60)
@@ -19,13 +32,23 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--model", default="mistralai/Mistral-7B-Instruct-v0.3")
     parser.add_argument("--output-json", default="benchmark/results/load_sweep.json")
     parser.add_argument("--output-csv", default="benchmark/results/load_sweep.csv")
+    parser.add_argument(
+        "--concurrencies",
+        type=_parse_concurrencies,
+        default="1,2,4,8,12,16",
+        help=(
+            "Comma-separated client concurrency levels (e.g. 1,2,4,8). "
+            "For meaningful scaling, keep max <= gateway MAX_CONCURRENT_REQUESTS "
+            "and vLLM --max-num-seqs; higher values mostly add queue wait (higher p95)."
+        ),
+    )
     return parser.parse_args()
 
 
 async def main() -> None:
     args = parse_args()
     prompt = build_prompt(args.prompt_tokens)
-    concurrencies = [1, 2, 4, 8, 12, 16]
+    concurrencies = args.concurrencies
     rows: list[dict] = []
     timeout = httpx.Timeout(180.0, connect=10.0)
 
