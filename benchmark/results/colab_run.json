@@ -1,0 +1,29 @@
+{
+  "timestamp": "2026-03-28T19:16:40.401774+00:00",
+  "config": {
+    "num_requests": 60,
+    "concurrency": 8,
+    "prompt_tokens": 120,
+    "max_tokens": 200,
+    "base_url": "http://127.0.0.1:8000",
+    "model": "Qwen/Qwen2.5-3B-Instruct"
+  },
+  "runs": {
+    "naive": {
+      "total_time_seconds": 370.0405568150013,
+      "requests_per_second": 0.16214438902705602,
+      "tokens_per_second": 32.428877805411204
+    },
+    "concurrent": {
+      "total_time_seconds": 50.77839621300018,
+      "requests_per_second": 1.1816048649570963,
+      "tokens_per_second": 236.32097299141924,
+      "latency_p50_ms": 6358.723571499922,
+      "latency_p95_ms": 6416.881606649918,
+      "latency_p99_ms": 6434.396771000056,
+      "time_to_first_token_p50_ms": 0.0,
+      "error_rate": 0.0
+    }
+  },
+  "throughput_multiplier": 7.2873620360673055
+}

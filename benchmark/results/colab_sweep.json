@@ -1,0 +1,50 @@
+[
+  {
+    "concurrency": 1,
+    "tokens_per_second": 32.037027285690705,
+    "latency_p95_ms": 6755.768048999993,
+    "error_rate": 0.0,
+    "gpu_util_avg": "",
+    "vram_used_mb_avg": ""
+  },
+  {
+    "concurrency": 2,
+    "tokens_per_second": 66.27365775616845,
+    "latency_p95_ms": 6058.500378550161,
+    "error_rate": 0.0,
+    "gpu_util_avg": "",
+    "vram_used_mb_avg": ""
+  },
+  {
+    "concurrency": 4,
+    "tokens_per_second": 127.64912484456352,
+    "latency_p95_ms": 6287.157551000178,
+    "error_rate": 0.0,
+    "gpu_util_avg": "",
+    "vram_used_mb_avg": ""
+  },
+  {
+    "concurrency": 8,
+    "tokens_per_second": 236.67956694392387,
+    "latency_p95_ms": 6397.921774300107,
+    "error_rate": 0.0,
+    "gpu_util_avg": "",
+    "vram_used_mb_avg": ""
+  },
+  {
+    "concurrency": 12,
+    "tokens_per_second": 237.54372029337785,
+    "latency_p95_ms": 12643.429717000026,
+    "error_rate": 0.0,
+    "gpu_util_avg": "",
+    "vram_used_mb_avg": ""
+  },
+  {
+    "concurrency": 16,
+    "tokens_per_second": 237.59279726453659,
+    "latency_p95_ms": 12703.425279150406,
+    "error_rate": 0.0,
+    "gpu_util_avg": "",
+    "vram_used_mb_avg": ""
+  }
+]

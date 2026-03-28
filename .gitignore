@@ -36,6 +36,8 @@ temp/
 
 benchmark/results/*
 !benchmark/results/.gitkeep
+!benchmark/results/*.json
+!benchmark/results/*.csv
 
 .cache/
 huggingface/
